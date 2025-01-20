@@ -45,3 +45,84 @@ You will need a RISC-V "newlib" tool chain from
 https://github.com/riscv/riscv-gnu-toolchain, and qemu compiled for
 riscv64-softmmu. Once they are installed, and in your shell
 search path, you can run "make qemu".
+
+
+--------------------------------
+
+xv6 Custom Scheduler with Nice Values
+
+Overview
+
+ This project extends the xv6 kernel to support custom scheduling policies, RR (Round Robin) and FCFS (First Come First Serve), along with nice value adjustments for fine-grained process priority control.
+
+Key features:
+
+ Custom System Calls:  
+    setnice(pid, nice): Adjusts the nice value of a process.
+    getnice(pid): Retrieves the nice value of a process.
+    Enhanced Scheduling Policies:
+    Round Robin (RR): Default policy in xv6 for time-sharing between processes.
+    First Come First Serve (FCFS): New scheduling policy where processes are scheduled based on arrival time.
+
+wait2 System Call:
+    Returns detailed execution statistics for processes, including run time, wait time, and sleep time.
+
+How to Build and Run:
+    Build xv6 with Custom Scheduler
+Clone the repository:
+
+git clone https://github.com/yourusername/your-repo-name.git
+cd your-repo-name/xv6-riscv
+Compile the xv6 kernel:
+
+make clean && make
+Run with Different Policies
+Round Robin (RR):
+
+
+make qemu CPUS=3 RR
+Description: This is the default policy in xv6, where processes are time-shared equally.
+First Come First Serve (FCFS):
+
+make qemu CPUS=3 FCFS=1
+Description: Processes are scheduled based on their arrival time. nice values may have limited effect depending on implementation.
+Test with Custom Scheduler
+Run the schedtest2 program inside xv6 to verify the functionality:
+
+(xv6)$ schedtest2
+Example output:
+
+Process 4 original nice is 10, now changed to 18
+Process 5 original nice is 10, now changed to 18
+Process 6 original nice is 10, now changed to 18
+Process 7 original nice is 10, now changed to 18
+Process 8 original nice is 10, now changed to 18
+Average run-time = 20,  wait time = 122, sleep time = 90
+
+Features
+    Custom System Calls:
+
+setnice: Adjusts the priority (nice value) of processes. Higher nice values correspond to lower priority.
+getnice: Queries the current nice value of a process.
+wait2: Collects detailed process statistics, including run time, wait time, and sleep time.
+Custom Scheduling Policies:
+
+RR (Round Robin): Time-sharing between processes using time quanta.
+FCFS (First Come First Serve): Processes are executed in the order of their arrival.
+Scheduling Tests (schedtest2):
+
+Generates a mix of I/O-bound and CPU-bound processes.
+Adjusts priorities for I/O-bound processes using setnice.
+File Modifications
+kernel/sysproc.c: Added sys_setnice, sys_getnice, and wait2 system calls.
+kernel/proc.c: Implemented FCFS scheduling logic and extended process statistics.
+kernel/proc.h: Added fields for nice value and additional statistics.
+user/schedtest2.c: Test program to validate the custom scheduler.
+Contributing
+Feel free to submit issues or pull requests to improve functionality or add features.
+
+License
+This project is licensed under the MIT License.
+
+Acknowledgments
+Based on MIT's xv6 Operating System.

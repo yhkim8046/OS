@@ -1766,209 +1766,121 @@ pop_off(void)
     80000d2a:	834080e7          	jalr	-1996(ra) # 8000055a <panic>
 
 0000000080000d2e <memset>:
-#include "types.h"
-
-void*
-memset(void *dst, int c, uint n)
-{
     80000d2e:	1141                	add	sp,sp,-16
     80000d30:	e422                	sd	s0,8(sp)
     80000d32:	0800                	add	s0,sp,16
-  char *cdst = (char *) dst;
-  int i;
-  for(i = 0; i < n; i++){
     80000d34:	ca19                	beqz	a2,80000d4a <memset+0x1c>
     80000d36:	87aa                	mv	a5,a0
     80000d38:	1602                	sll	a2,a2,0x20
     80000d3a:	9201                	srl	a2,a2,0x20
     80000d3c:	00a60733          	add	a4,a2,a0
-    cdst[i] = c;
     80000d40:	00b78023          	sb	a1,0(a5)
-  for(i = 0; i < n; i++){
     80000d44:	0785                	add	a5,a5,1
     80000d46:	fee79de3          	bne	a5,a4,80000d40 <memset+0x12>
-  }
-  return dst;
-}
     80000d4a:	6422                	ld	s0,8(sp)
     80000d4c:	0141                	add	sp,sp,16
     80000d4e:	8082                	ret
 
 0000000080000d50 <memcmp>:
-
-int
-memcmp(const void *v1, const void *v2, uint n)
-{
     80000d50:	1141                	add	sp,sp,-16
     80000d52:	e422                	sd	s0,8(sp)
     80000d54:	0800                	add	s0,sp,16
-  const uchar *s1, *s2;
-
-  s1 = v1;
-  s2 = v2;
-  while(n-- > 0){
     80000d56:	ca05                	beqz	a2,80000d86 <memcmp+0x36>
     80000d58:	fff6069b          	addw	a3,a2,-1 # fff <_entry-0x7ffff001>
     80000d5c:	1682                	sll	a3,a3,0x20
     80000d5e:	9281                	srl	a3,a3,0x20
     80000d60:	0685                	add	a3,a3,1
     80000d62:	96aa                	add	a3,a3,a0
-    if(*s1 != *s2)
     80000d64:	00054783          	lbu	a5,0(a0)
     80000d68:	0005c703          	lbu	a4,0(a1)
     80000d6c:	00e79863          	bne	a5,a4,80000d7c <memcmp+0x2c>
-      return *s1 - *s2;
-    s1++, s2++;
     80000d70:	0505                	add	a0,a0,1
     80000d72:	0585                	add	a1,a1,1
-  while(n-- > 0){
     80000d74:	fed518e3          	bne	a0,a3,80000d64 <memcmp+0x14>
-  }
-
-  return 0;
     80000d78:	4501                	li	a0,0
     80000d7a:	a019                	j	80000d80 <memcmp+0x30>
-      return *s1 - *s2;
     80000d7c:	40e7853b          	subw	a0,a5,a4
-}
     80000d80:	6422                	ld	s0,8(sp)
     80000d82:	0141                	add	sp,sp,16
     80000d84:	8082                	ret
-  return 0;
     80000d86:	4501                	li	a0,0
     80000d88:	bfe5                	j	80000d80 <memcmp+0x30>
 
 0000000080000d8a <memmove>:
-
-void*
-memmove(void *dst, const void *src, uint n)
-{
     80000d8a:	1141                	add	sp,sp,-16
     80000d8c:	e422                	sd	s0,8(sp)
     80000d8e:	0800                	add	s0,sp,16
-  const char *s;
-  char *d;
-
-  if(n == 0)
     80000d90:	c205                	beqz	a2,80000db0 <memmove+0x26>
-    return dst;
-  
-  s = src;
-  d = dst;
-  if(s < d && s + n > d){
     80000d92:	02a5e263          	bltu	a1,a0,80000db6 <memmove+0x2c>
-    s += n;
-    d += n;
-    while(n-- > 0)
-      *--d = *--s;
-  } else
-    while(n-- > 0)
     80000d96:	1602                	sll	a2,a2,0x20
     80000d98:	9201                	srl	a2,a2,0x20
     80000d9a:	00c587b3          	add	a5,a1,a2
-{
     80000d9e:	872a                	mv	a4,a0
-      *d++ = *s++;
     80000da0:	0585                	add	a1,a1,1
     80000da2:	0705                	add	a4,a4,1 # fffffffffffff001 <end+0xffffffff7ffd9001>
     80000da4:	fff5c683          	lbu	a3,-1(a1)
     80000da8:	fed70fa3          	sb	a3,-1(a4)
-    while(n-- > 0)
     80000dac:	feb79ae3          	bne	a5,a1,80000da0 <memmove+0x16>
-
-  return dst;
-}
     80000db0:	6422                	ld	s0,8(sp)
     80000db2:	0141                	add	sp,sp,16
     80000db4:	8082                	ret
-  if(s < d && s + n > d){
     80000db6:	02061693          	sll	a3,a2,0x20
     80000dba:	9281                	srl	a3,a3,0x20
     80000dbc:	00d58733          	add	a4,a1,a3
     80000dc0:	fce57be3          	bgeu	a0,a4,80000d96 <memmove+0xc>
-    d += n;
     80000dc4:	96aa                	add	a3,a3,a0
-    while(n-- > 0)
     80000dc6:	fff6079b          	addw	a5,a2,-1
     80000dca:	1782                	sll	a5,a5,0x20
     80000dcc:	9381                	srl	a5,a5,0x20
     80000dce:	fff7c793          	not	a5,a5
     80000dd2:	97ba                	add	a5,a5,a4
-      *--d = *--s;
     80000dd4:	177d                	add	a4,a4,-1
     80000dd6:	16fd                	add	a3,a3,-1
     80000dd8:	00074603          	lbu	a2,0(a4)
     80000ddc:	00c68023          	sb	a2,0(a3)
-    while(n-- > 0)
     80000de0:	fef71ae3          	bne	a4,a5,80000dd4 <memmove+0x4a>
     80000de4:	b7f1                	j	80000db0 <memmove+0x26>
 
 0000000080000de6 <memcpy>:
-
-// memcpy exists to placate GCC.  Use memmove.
-void*
-memcpy(void *dst, const void *src, uint n)
-{
     80000de6:	1141                	add	sp,sp,-16
     80000de8:	e406                	sd	ra,8(sp)
     80000dea:	e022                	sd	s0,0(sp)
     80000dec:	0800                	add	s0,sp,16
-  return memmove(dst, src, n);
     80000dee:	00000097          	auipc	ra,0x0
     80000df2:	f9c080e7          	jalr	-100(ra) # 80000d8a <memmove>
-}
     80000df6:	60a2                	ld	ra,8(sp)
     80000df8:	6402                	ld	s0,0(sp)
     80000dfa:	0141                	add	sp,sp,16
     80000dfc:	8082                	ret
 
 0000000080000dfe <strncmp>:
-
-int
-strncmp(const char *p, const char *q, uint n)
-{
     80000dfe:	1141                	add	sp,sp,-16
     80000e00:	e422                	sd	s0,8(sp)
     80000e02:	0800                	add	s0,sp,16
-  while(n > 0 && *p && *p == *q)
     80000e04:	ce11                	beqz	a2,80000e20 <strncmp+0x22>
     80000e06:	00054783          	lbu	a5,0(a0)
     80000e0a:	cf89                	beqz	a5,80000e24 <strncmp+0x26>
     80000e0c:	0005c703          	lbu	a4,0(a1)
     80000e10:	00f71a63          	bne	a4,a5,80000e24 <strncmp+0x26>
-    n--, p++, q++;
     80000e14:	367d                	addw	a2,a2,-1
     80000e16:	0505                	add	a0,a0,1
     80000e18:	0585                	add	a1,a1,1
-  while(n > 0 && *p && *p == *q)
     80000e1a:	f675                	bnez	a2,80000e06 <strncmp+0x8>
-  if(n == 0)
-    return 0;
     80000e1c:	4501                	li	a0,0
     80000e1e:	a801                	j	80000e2e <strncmp+0x30>
     80000e20:	4501                	li	a0,0
     80000e22:	a031                	j	80000e2e <strncmp+0x30>
-  return (uchar)*p - (uchar)*q;
     80000e24:	00054503          	lbu	a0,0(a0)
     80000e28:	0005c783          	lbu	a5,0(a1)
     80000e2c:	9d1d                	subw	a0,a0,a5
-}
     80000e2e:	6422                	ld	s0,8(sp)
     80000e30:	0141                	add	sp,sp,16
     80000e32:	8082                	ret
 
 0000000080000e34 <strncpy>:
-
-char*
-strncpy(char *s, const char *t, int n)
-{
     80000e34:	1141                	add	sp,sp,-16
     80000e36:	e422                	sd	s0,8(sp)
     80000e38:	0800                	add	s0,sp,16
-  char *os;
-
-  os = s;
-  while(n-- > 0 && (*s++ = *t++) != 0)
     80000e3a:	87aa                	mv	a5,a0
     80000e3c:	86b2                	mv	a3,a2
     80000e3e:	367d                	addw	a2,a2,-1
@@ -1978,71 +1890,43 @@ strncpy(char *s, const char *t, int n)
     80000e4a:	fee78fa3          	sb	a4,-1(a5)
     80000e4e:	0585                	add	a1,a1,1
     80000e50:	f775                	bnez	a4,80000e3c <strncpy+0x8>
-    ;
-  while(n-- > 0)
     80000e52:	873e                	mv	a4,a5
     80000e54:	9fb5                	addw	a5,a5,a3
     80000e56:	37fd                	addw	a5,a5,-1
     80000e58:	00c05963          	blez	a2,80000e6a <strncpy+0x36>
-    *s++ = 0;
     80000e5c:	0705                	add	a4,a4,1
     80000e5e:	fe070fa3          	sb	zero,-1(a4)
-  while(n-- > 0)
     80000e62:	40e786bb          	subw	a3,a5,a4
     80000e66:	fed04be3          	bgtz	a3,80000e5c <strncpy+0x28>
-  return os;
-}
     80000e6a:	6422                	ld	s0,8(sp)
     80000e6c:	0141                	add	sp,sp,16
     80000e6e:	8082                	ret
 
 0000000080000e70 <safestrcpy>:
-
-// Like strncpy but guaranteed to NUL-terminate.
-char*
-safestrcpy(char *s, const char *t, int n)
-{
     80000e70:	1141                	add	sp,sp,-16
     80000e72:	e422                	sd	s0,8(sp)
     80000e74:	0800                	add	s0,sp,16
-  char *os;
-
-  os = s;
-  if(n <= 0)
     80000e76:	02c05363          	blez	a2,80000e9c <safestrcpy+0x2c>
     80000e7a:	fff6069b          	addw	a3,a2,-1
     80000e7e:	1682                	sll	a3,a3,0x20
     80000e80:	9281                	srl	a3,a3,0x20
     80000e82:	96ae                	add	a3,a3,a1
     80000e84:	87aa                	mv	a5,a0
-    return os;
-  while(--n > 0 && (*s++ = *t++) != 0)
     80000e86:	00d58963          	beq	a1,a3,80000e98 <safestrcpy+0x28>
     80000e8a:	0585                	add	a1,a1,1
     80000e8c:	0785                	add	a5,a5,1
     80000e8e:	fff5c703          	lbu	a4,-1(a1)
     80000e92:	fee78fa3          	sb	a4,-1(a5)
     80000e96:	fb65                	bnez	a4,80000e86 <safestrcpy+0x16>
-    ;
-  *s = 0;
     80000e98:	00078023          	sb	zero,0(a5)
-  return os;
-}
     80000e9c:	6422                	ld	s0,8(sp)
     80000e9e:	0141                	add	sp,sp,16
     80000ea0:	8082                	ret
 
 0000000080000ea2 <strlen>:
-
-int
-strlen(const char *s)
-{
     80000ea2:	1141                	add	sp,sp,-16
     80000ea4:	e422                	sd	s0,8(sp)
     80000ea6:	0800                	add	s0,sp,16
-  int n;
-
-  for(n = 0; s[n]; n++)
     80000ea8:	00054783          	lbu	a5,0(a0)
     80000eac:	cf91                	beqz	a5,80000ec8 <strlen+0x26>
     80000eae:	0505                	add	a0,a0,1
@@ -2053,13 +1937,9 @@ strlen(const char *s)
     80000eba:	ff65                	bnez	a4,80000eb2 <strlen+0x10>
     80000ebc:	40a6853b          	subw	a0,a3,a0
     80000ec0:	2505                	addw	a0,a0,1
-    ;
-  return n;
-}
     80000ec2:	6422                	ld	s0,8(sp)
     80000ec4:	0141                	add	sp,sp,16
     80000ec6:	8082                	ret
-  for(n = 0; s[n]; n++)
     80000ec8:	4501                	li	a0,0
     80000eca:	bfe5                	j	80000ec2 <strlen+0x20>
 
@@ -6451,18 +6331,20 @@ sys_uptime(void)
 
 0000000080002ed4 <sys_pageAccess>:
 
-//22151849 Yuhwan Kim
-int
-sys_pageAccess(void)
-{
+// Implementation of the pageAccess system call
+// This system call checks if specific virtual memory pages have been accessed recently.
+// It returns a bitmap where each bit corresponds to the access status of a page.
+// Additionally, it clears the accessed (PTE_A) bit for the examined pages.
+int sys_pageAccess(void) {
     80002ed4:	711d                	add	sp,sp,-96
     80002ed6:	ec86                	sd	ra,88(sp)
     80002ed8:	e8a2                	sd	s0,80(sp)
     80002eda:	1080                	add	s0,sp,96
+    uint64 usrpage_ptr; // Starting virtual address provided by the user
+    int npages;         // Number of pages to examine
+    uint64 usraddr;     // Address to store the resulting bitmap in user space
     
-    uint64 usrpage_ptr;
-    int npages;
-    uint64 usraddr;
+    // Retrieve arguments from the system call
     argaddr(0, &usrpage_ptr);
     80002edc:	fb840593          	add	a1,s0,-72
     80002ee0:	4501                	li	a0,0
@@ -6479,29 +6361,29 @@ sys_pageAccess(void)
     80002efe:	00000097          	auipc	ra,0x0
     80002f02:	d0e080e7          	jalr	-754(ra) # 80002c0c <argaddr>
 
-    struct proc* p = myproc();
+    struct proc* p = myproc(); // Get the current process
     80002f06:	fffff097          	auipc	ra,0xfffff
     80002f0a:	c24080e7          	jalr	-988(ra) # 80001b2a <myproc>
-    unsigned long bitmap = 0; // Initialize the bitmap
+    unsigned long bitmap = 0;  // Initialize the bitmap to track accessed pages
     80002f0e:	fa043023          	sd	zero,-96(s0)
-  
-    // Validate npages
-    if(npages <= 0 || npages > 64)
+
+    // Validate the number of pages
+    if (npages <= 0 || npages > 64)
     80002f12:	fb442783          	lw	a5,-76(s0)
     80002f16:	37fd                	addw	a5,a5,-1
     80002f18:	03f00713          	li	a4,63
     80002f1c:	0af76263          	bltu	a4,a5,80002fc0 <sys_pageAccess+0xec>
     80002f20:	fc4e                	sd	s3,56(sp)
     80002f22:	89aa                	mv	s3,a0
-        return -1;
+        return -1; // Return error if npages is out of bounds
   
-    // Traverse the page table
-    for(int i = 0; i < npages; i++) {
-        uint64 va = usrpage_ptr + i * PGSIZE; // Calculate the virtual address
+    // Traverse the page table for the specified range
+    for (int i = 0; i < npages; i++) {
+        uint64 va = usrpage_ptr + i * PGSIZE; // Calculate the virtual address for the ith page
     80002f24:	fb843583          	ld	a1,-72(s0)
 
-        // Validate the virtual address
-        if(va >= MAXVA)
+        // Ensure the virtual address is valid
+        if (va >= MAXVA)
     80002f28:	57fd                	li	a5,-1
     80002f2a:	83e9                	srl	a5,a5,0x1a
     80002f2c:	08b7ec63          	bltu	a5,a1,80002fc4 <sys_pageAccess+0xf0>
@@ -6511,34 +6393,34 @@ sys_pageAccess(void)
     80002f36:	f456                	sd	s5,40(sp)
     80002f38:	f05a                	sd	s6,32(sp)
     80002f3a:	6905                	lui	s2,0x1
-    for(int i = 0; i < npages; i++) {
+    for (int i = 0; i < npages; i++) {
     80002f3c:	4481                	li	s1,0
-        if((*pte & PTE_V) == 0)
+        if ((*pte & PTE_V) == 0)
             continue; // Skip invalid pages
 
-        // Check if the access bit is set
-        if(*pte & PTE_A) {
-            bitmap |= (1UL << i); // Set the corresponding bit in the bitmap
+        // Check if the page has been accessed (PTE_A bit set)
+        if (*pte & PTE_A) {
+            bitmap |= (1UL << i); // Set the corresponding bit in the bitmap for the accessed page
     80002f3e:	4b05                	li	s6,1
-        if(va >= MAXVA)
+        if (va >= MAXVA)
     80002f40:	6a85                	lui	s5,0x1
     80002f42:	8a3e                	mv	s4,a5
     80002f44:	a005                	j	80002f64 <sys_pageAccess+0x90>
         }
 
-        // Clear the PTE_A bit to remove previous access record
+        // Clear the PTE_A bit to reset the access record for future checks
         *pte &= ~PTE_A;
     80002f46:	611c                	ld	a5,0(a0)
     80002f48:	fbf7f793          	and	a5,a5,-65
     80002f4c:	e11c                	sd	a5,0(a0)
-    for(int i = 0; i < npages; i++) {
+    for (int i = 0; i < npages; i++) {
     80002f4e:	2485                	addw	s1,s1,1
     80002f50:	fb442783          	lw	a5,-76(s0)
     80002f54:	02f4df63          	bge	s1,a5,80002f92 <sys_pageAccess+0xbe>
-        uint64 va = usrpage_ptr + i * PGSIZE; // Calculate the virtual address
+        uint64 va = usrpage_ptr + i * PGSIZE; // Calculate the virtual address for the ith page
     80002f58:	fb843583          	ld	a1,-72(s0)
     80002f5c:	95ca                	add	a1,a1,s2
-        if(va >= MAXVA)
+        if (va >= MAXVA)
     80002f5e:	9956                	add	s2,s2,s5
     80002f60:	06ba6563          	bltu	s4,a1,80002fca <sys_pageAccess+0xf6>
         pte_t *pte = walk(p->pagetable, va, 0);
@@ -6546,16 +6428,16 @@ sys_pageAccess(void)
     80002f66:	0509b503          	ld	a0,80(s3)
     80002f6a:	ffffe097          	auipc	ra,0xffffe
     80002f6e:	09c080e7          	jalr	156(ra) # 80001006 <walk>
-        if(pte == 0)
+        if (pte == 0)
     80002f72:	c525                	beqz	a0,80002fda <sys_pageAccess+0x106>
-        if((*pte & PTE_V) == 0)
+        if ((*pte & PTE_V) == 0)
     80002f74:	611c                	ld	a5,0(a0)
     80002f76:	0017f713          	and	a4,a5,1
     80002f7a:	db71                	beqz	a4,80002f4e <sys_pageAccess+0x7a>
-        if(*pte & PTE_A) {
+        if (*pte & PTE_A) {
     80002f7c:	0407f793          	and	a5,a5,64
     80002f80:	d3f9                	beqz	a5,80002f46 <sys_pageAccess+0x72>
-            bitmap |= (1UL << i); // Set the corresponding bit in the bitmap
+            bitmap |= (1UL << i); // Set the corresponding bit in the bitmap for the accessed page
     80002f82:	009b1733          	sll	a4,s6,s1
     80002f86:	fa043783          	ld	a5,-96(s0)
     80002f8a:	8fd9                	or	a5,a5,a4
@@ -6563,8 +6445,8 @@ sys_pageAccess(void)
     80002f90:	bf5d                	j	80002f46 <sys_pageAccess+0x72>
     }
 
-    // Return the bitmap pointer to the user program
-    if(copyout(p->pagetable, usraddr, (char*)&bitmap, sizeof(bitmap)) < 0)
+    // Copy the resulting bitmap to the user-space address
+    if (copyout(p->pagetable, usraddr, (char*)&bitmap, sizeof(bitmap)) < 0)
     80002f92:	46a1                	li	a3,8
     80002f94:	fa040613          	add	a2,s0,-96
     80002f98:	fa843583          	ld	a1,-88(s0)
@@ -6578,7 +6460,7 @@ sys_pageAccess(void)
     80002fb2:	7a42                	ld	s4,48(sp)
     80002fb4:	7aa2                	ld	s5,40(sp)
     80002fb6:	7b02                	ld	s6,32(sp)
-        return -1; // Failed to copy
+        return -1; // Return error if the bitmap could not be copied
 
     return 0; // Success
 }
@@ -6586,10 +6468,10 @@ sys_pageAccess(void)
     80002fba:	6446                	ld	s0,80(sp)
     80002fbc:	6125                	add	sp,sp,96
     80002fbe:	8082                	ret
-        return -1;
+        return -1; // Return error if npages is out of bounds
     80002fc0:	557d                	li	a0,-1
     80002fc2:	bfdd                	j	80002fb8 <sys_pageAccess+0xe4>
-            return -1;
+            return -1; // Return error if address exceeds the maximum valid address
     80002fc4:	557d                	li	a0,-1
     80002fc6:	79e2                	ld	s3,56(sp)
     80002fc8:	bfc5                	j	80002fb8 <sys_pageAccess+0xe4>
@@ -6601,7 +6483,7 @@ sys_pageAccess(void)
     80002fd4:	7aa2                	ld	s5,40(sp)
     80002fd6:	7b02                	ld	s6,32(sp)
     80002fd8:	b7c5                	j	80002fb8 <sys_pageAccess+0xe4>
-            return -1; // Failed to find the PTE
+            return -1; // Return error if PTE is not found
     80002fda:	557d                	li	a0,-1
     80002fdc:	64a6                	ld	s1,72(sp)
     80002fde:	6906                	ld	s2,64(sp)
