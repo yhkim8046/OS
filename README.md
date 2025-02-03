@@ -1,4 +1,7 @@
-"Welcome to my OS Kernel Programming repository!
-This repository contains projects and implementations focused on operating system concepts such as system calls, process management, and kernel-level programming.
-Feel free to explore the code and provide your feedback!"
+✨ Welcome to My OS Kernel Programming Repository! ✨
 
+Dive into the world of Operating Systems with this collection of projects and implementations that showcase key concepts like:
+
+🛠️ System Calls
+🔄 Process Management
+⚙️ Kernel-Level Programming
